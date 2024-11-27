@@ -23,7 +23,14 @@ export class ArticlesServiceService {
       map((response) => response) // Extraction du champ `data` de la réponse
     );
   }
+
   
+  public modifyArticle(article:Article): Observable<boolean> {
+    return this.http.put(API_BASE_URL+"/article"+article.id.toString(),
+    article,
+      {observe: 'response', responseType: 'json'})
+      .pipe(map((response)=>response.status===200))
+  }
   
 
   public deleteArticleFromId(id: string): Observable<boolean> {
