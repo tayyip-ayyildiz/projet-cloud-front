@@ -1,0 +1,22 @@
+@if (ready) {
+
+<p>Home works!</p>
+
+<table>
+  <tr>
+    <th>Nom</th>
+    <th>Actions</th>
+  </tr>
+
+  <tr>
+    @for (a of  articles; track a.id){
+        <td>{{a.id}}</td>
+        <td>{{ a.name }}</td>
+        <td>
+          <button [routerLink]="['/article/',a.id]">Show</button>
+        </td>
+    }
+  </tr>
+</table>
+
+}
