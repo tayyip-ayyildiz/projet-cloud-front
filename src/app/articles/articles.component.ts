@@ -3,10 +3,11 @@ import { ArticlesServiceService } from '../articles-service.service';
 import { Article } from '../entity/Article';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-articles',
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './articles.component.html',
   styleUrl: './articles.component.css'
 })

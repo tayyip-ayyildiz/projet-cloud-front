@@ -1,0 +1,13 @@
+<p>edit-article works!</p>
+
+<form>
+    <label for="theTitre">Titre: </label>
+    <input #titre id="theName" type="text" required [value]="article.name">
+    <br/>
+    <textarea #description cols="60" rows="15" [textContent]="article.description"></textarea>
+    <br/>
+    <input #image id="theImage" type="text" required [value]="article.image">
+    <br/>
+    <button (click)="update(titre.value, description.value, image.value)">Edit</button>
+    <button [routerLink]="['/article/',article.id]">Back</button>
+</form>

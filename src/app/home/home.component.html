@@ -10,7 +10,6 @@
 
   <tr>
     @for (a of  articles; track a.id){
-        <td>{{a.id}}</td>
         <td>{{ a.name }}</td>
         <td>
           <button [routerLink]="['/article/',a.id]">Show</button>

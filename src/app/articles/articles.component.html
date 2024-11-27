@@ -2,17 +2,18 @@
 
 <table>
     <tr>
-      <th>Titre</th>
+      <th>Nom</th>
       <th>Description</th>
-      <th>Date</th>
+      <th>Image</th>
       <th>Actions</th>
     </tr>
     <tr>
-      <td>{{article.id}}</td>
       <td>{{ article.name }}</td>
       <td>{{ article.description }}</td>
       <td>{{ article.image }}</td>
-      <td><button (click)="remove(article.id)">Delete</button>
+      <td><button [routerLink]="['/edit-article/',article.id]">Edit</button>
+        <button (click)="remove(article.id)">Delete</button>
       </td>
+      <td><button [routerLink]="['/']">Back</button></td>
     </tr>
   </table>
