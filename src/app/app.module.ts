@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ArticlesComponent } from './articles/articles.component';
 import { provideHttpClient } from '@angular/common/http';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { provideHttpClient } from '@angular/common/http';
   imports: [
     BrowserModule,
     CommonModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [provideHttpClient()],
   bootstrap: [] 

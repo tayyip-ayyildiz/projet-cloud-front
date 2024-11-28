@@ -1,62 +1,89 @@
-import { Component } from '@angular/core';
-import { Article } from '../entity/Article';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ArticlesServiceService } from '../articles-service.service';
-import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { RouterModule } from '@angular/router';
+import { Article } from '../entity/Article';
 
 @Component({
   selector: 'app-edit-article',
-  imports: [RouterModule],
   templateUrl: './edit-article.component.html',
-  styleUrl: './edit-article.component.css'
+  styleUrls: ['./edit-article.component.css'],
+  imports: [RouterModule, FormsModule,ReactiveFormsModule]
 })
-export class EditArticleComponent {
-
-  id:string=''
+export class EditArticleComponent implements OnInit {
+  editArticleForm!: FormGroup;
   article: Article = {
+    id: '',
+    name: '',
+    description: '',
+    image: ''
+  };
+  message: string = '';
 
-    id:'',
-    name:'',
-    description:'',
-    image:''
-
-  }
-
-
-  constructor(private articleService: ArticlesServiceService,
-              private location:Location,
-              private route: ActivatedRoute
-  ) { }
-
-  private set(name: string, description: string, image:string): void {
-    this.article.name = name
-    this.article.description = description
-    this.article.image = image
-  
-  }
-
-  goBack(): void {
-    this.location.back()
-  }
-
-  update(name: string, description: string, image:string): void {
-  
-    if (this.id !== undefined) {
-      if (name.length !== 0 && description.length!==0 && image.length!==0) {
-        this.set(name, description, image)
-        this.articleService.modifyArticle(this.article).subscribe(()=>this.goBack());        
-      }   
-    }
-  }
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private articleService: ArticlesServiceService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    const idParameter: string | null = this.route.snapshot.paramMap.get('id')
-    if (idParameter !== null) {
-      this.id = idParameter
-      this.articleService.getArticleFromId(this.id)
-      .subscribe((article)=>this.article=article)
-      }
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.article.id = id;
+      this.loadArticle(id);
+    }
+
+    this.editArticleForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      description: ['', [Validators.required, Validators.minLength(10)]],
+      image: ['', [Validators.required]]
+    });
   }
 
+  loadArticle(id: string): void {
+    this.articleService.getArticleFromId(id).subscribe({
+      next: (data) => {
+        this.article = data;
+        this.editArticleForm.patchValue({
+          name: this.article.name,
+          description: this.article.description,
+          image: this.article.image
+        });
+      },
+      error: (err) => console.error('Erreur lors du chargement de l\'article:', err)
+    });
+  }
+
+  update(): void {
+    if (this.editArticleForm.valid) {
+      const { name, description, image } = this.editArticleForm.value;
+
+      if (this.article.id) {
+        if (name.length !== 0 && description.length !== 0 && image.length !== 0) {
+          this.article.name = name;
+          this.article.description = description;
+          this.article.image = image;
+
+          this.articleService.modifyArticle(this.article).subscribe({
+            next: () => {
+              console.log('Article mis à jour avec succès.');
+              this.router.navigate(['/article', this.article.id]); // Redirection après mise à jour
+            },
+            error: (err) => {
+              console.error('Erreur lors de la mise à jour de l\'article :', err);
+              this.message = 'Erreur lors de la mise à jour.';
+            }
+          });
+        } else {
+          console.error('Les champs ne peuvent pas être vides.');
+        }
+      } else {
+        console.error('ID de l\'article non défini.');
+      }
+    } else {
+      console.error('Formulaire invalide.');
+      this.message = 'Veuillez remplir correctement tous les champs.';
+    }
+  }
 }

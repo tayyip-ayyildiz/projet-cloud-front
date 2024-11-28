@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ArticlesServiceService } from '../articles-service.service';
 import { Article } from '../entity/Article';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -23,7 +23,8 @@ export class ArticlesComponent {
 
   constructor(private articleService: ArticlesServiceService,
               private route: ActivatedRoute,
-              private location: Location) {
+              private location: Location,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -40,6 +41,6 @@ export class ArticlesComponent {
   }
 
   goBack(): void {
-    this.location.back()
+    this.router.navigate(['/'])
   }
 }

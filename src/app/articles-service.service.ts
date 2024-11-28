@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { API_BASE_URL } from './constant';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Article } from './entity/Article';
 import { HttpClient } from '@angular/common/http';
 
@@ -25,12 +25,21 @@ export class ArticlesServiceService {
   }
 
   
-  public modifyArticle(article:Article): Observable<boolean> {
-    return this.http.put(API_BASE_URL+"/article"+article.id.toString(),
-    article,
-      {observe: 'response', responseType: 'json'})
-      .pipe(map((response)=>response.status===200))
+  public modifyArticle(article: Article): Observable<boolean> {
+    console.log("HEY");
+    return this.http.put(`${API_BASE_URL}/article/${article.id}`, article, {
+        observe: 'response',
+        responseType: 'json',
+      })
+      .pipe(
+        map((response) => response.status === 200),
+        catchError((error) => {
+          console.error('Erreur lors de la modification de l\'article :', error);
+          return of(false); // Retourne `false` en cas d'erreur
+        })
+      );
   }
+  
   
 
   public deleteArticleFromId(id: string): Observable<boolean> {
@@ -40,7 +49,7 @@ export class ArticlesServiceService {
   }
 
   public createArticle(article: Article) : Observable<boolean> {
-    return this.http.post(API_BASE_URL,
+    return this.http.post(API_BASE_URL+"/article",
       article,
       {observe: 'response', responseType: 'json'})
       .pipe(map((response)=>response.status===201))

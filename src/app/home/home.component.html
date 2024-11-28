@@ -1,7 +1,4 @@
 @if (ready) {
-
-<p>Home works!</p>
-
 <table>
   <tr>
     <th>Nom</th>
@@ -15,6 +12,7 @@
           <button [routerLink]="['/article/',a.id]">Show</button>
         </td>
     }
+    <td><button [routerLink]="['/create-article']">Create</button></td>
   </tr>
 </table>
 

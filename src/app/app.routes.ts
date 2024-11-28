@@ -3,11 +3,13 @@ import { HomeComponent } from './home/home.component';
 import { ArticlesComponent } from './articles/articles.component';
 import { NgModule } from '@angular/core';
 import { EditArticleComponent } from './edit-article/edit-article.component';
+import { CreateArticleComponent } from './create-article/create-article.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
     { path: 'article/:id', component: ArticlesComponent},
-    { path: 'edit-article/:id', component: EditArticleComponent}
+    { path: 'edit-article/:id', component: EditArticleComponent},
+    { path: 'create-article', component: CreateArticleComponent}
 ];
 
 @NgModule({

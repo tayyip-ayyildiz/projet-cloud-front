@@ -1,0 +1,17 @@
+<form [formGroup]="createArticleForm">
+    <label for="theTitre">Titre: </label>
+    <input id="theTitre" formControlName="name" type="text" required />
+    <br />
+  
+    <label for="theDescription">Description: </label>
+    <textarea id="theDescription" formControlName="description" cols="60" rows="15" required></textarea>
+    <br />
+  
+    <label for="theImage">Image: </label>
+    <input id="theImage" formControlName="image" type="text" required />
+    <br />
+  
+    <button type="button" (click)="create()">Create</button>
+    <button [routerLink]="['/']" type="button">Back</button>
+  </form>
+  
